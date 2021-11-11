@@ -1,0 +1,182 @@
+[
+	{
+		"team_name":"Team A",
+		"driver_name":"Driver A",
+		"driver_skill":10,
+		"car_number":"01",
+		"handling":12,
+		"power":8,
+		"reliability":10
+	},
+	{
+		"team_name":"Team A",
+		"driver_name":"Driver A2",
+		"driver_skill":9,
+		"car_number":"02",
+		"handling":12,
+		"power":8,
+		"reliability":10
+	},
+	{
+		"team_name":"Team B",
+		"driver_name":"Driver B",
+		"driver_skill":10,
+		"car_number":"11",
+		"handling":8,
+		"power":12,
+		"reliability":10
+	},
+	{
+		"team_name":"Team B",
+		"driver_name":"Driver B2",
+		"driver_skill":9,
+		"car_number":"12",
+		"handling":8,
+		"power":12,
+		"reliability":10
+	},
+	{
+		"team_name":"Team C",
+		"driver_name":"Driver C",
+		"driver_skill":8,
+		"car_number":"21",
+		"handling":10,
+		"power":10,
+		"reliability":9
+	},
+	{
+		"team_name":"Team C",
+		"driver_name":"Driver C2",
+		"driver_skill":7,
+		"car_number":"22",
+		"handling":10,
+		"power":10,
+		"reliability":9
+	},
+	{
+		"team_name":"Team D",
+		"driver_name":"Driver D",
+		"driver_skill":13,
+		"car_number":"31",
+		"handling":8,
+		"power":9,
+		"reliability":8
+	},
+	{
+		"team_name":"Team D",
+		"driver_name":"Driver D2",
+		"driver_skill":12,
+		"car_number":"32",
+		"handling":8,
+		"power":9,
+		"reliability":8
+	},
+	{
+		"team_name":"Team E",
+		"driver_name":"Driver E",
+		"driver_skill":9,
+		"car_number":"41",
+		"handling":14,
+		"power":9,
+		"reliability":9
+	},
+	{
+		"team_name":"Team E",
+		"driver_name":"Driver E2",
+		"driver_skill":8,
+		"car_number":"42",
+		"handling":14,
+		"power":9,
+		"reliability":9
+	},
+	{
+		"team_name":"Team F",
+		"driver_name":"Driver F",
+		"driver_skill":9,
+		"car_number":"51",
+		"handling":9,
+		"power":14,
+		"reliability":10
+	},
+	{
+		"team_name":"Team F",
+		"driver_name":"Driver F2",
+		"driver_skill":8,
+		"car_number":"52",
+		"handling":9,
+		"power":14,
+		"reliability":10
+	},
+	{
+		"team_name":"Team G",
+		"driver_name":"Driver G",
+		"driver_skill":8,
+		"car_number":"61",
+		"handling":11,
+		"power":12,
+		"reliability":10
+	},
+	{
+		"team_name":"Team G",
+		"driver_name":"Driver G2",
+		"driver_skill":7,
+		"car_number":"62",
+		"handling":11,
+		"power":12,
+		"reliability":10
+	},
+	{
+		"team_name":"Team H",
+		"driver_name":"Driver H",
+		"driver_skill":12,
+		"car_number":"71",
+		"handling":9,
+		"power":11,
+		"reliability":12
+	},
+	{
+		"team_name":"Team H",
+		"driver_name":"Driver H2",
+		"driver_skill":11,
+		"car_number":"72",
+		"handling":9,
+		"power":11,
+		"reliability":12
+	},
+	{
+		"team_name":"Team I",
+		"driver_name":"Driver I",
+		"driver_skill":10,
+		"car_number":"81",
+		"handling":11,
+		"power":9,
+		"reliability":12
+	},
+	{
+		"team_name":"Team I",
+		"driver_name":"Driver I2",
+		"driver_skill":9,
+		"car_number":"82",
+		"handling":11,
+		"power":9,
+		"reliability":12
+	},
+	{
+		"team_name":"Team J",
+		"driver_name":"Driver J",
+		"driver_skill":10,
+		"car_number":"91",
+		"handling":10,
+		"power":10,
+		"reliability":7
+	},
+	{
+		"team_name":"Team J",
+		"driver_name":"Driver J2",
+		"driver_skill":9,
+		"car_number":"92",
+		"handling":10,
+		"power":10,
+		"reliability":7
+	}
+]

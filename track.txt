@@ -1,0 +1,102 @@
+{
+	"reliability_rating":8,
+	"items":
+	{
+		"1":
+		{
+			"base_time":10.0,
+			"name":"Staylow Corner",
+			"power":7,
+			"handling":13,
+			"is_lap_end":false
+		},
+		"2":
+		{
+			"base_time":11.5,
+			"name":"Kafrica Kurves",
+			"power":12,
+			"handling":8,
+			"is_lap_end":false
+		},
+		"3":
+		{
+			"base_time":10.0,
+			"name":"Sudden Hairpin",
+			"power":6,
+			"handling":15,
+			"is_lap_end":false
+		},
+		"4":
+		{
+			"base_time":14.5,
+			"name":"Back Straight",
+			"power":7,
+			"handling":13,
+			"is_lap_end":false
+		},
+		"5":
+		{
+			"base_time":5.0,
+			"name":"Kryten Kink",
+			"power":11,
+			"handling":11,
+			"is_lap_end":false
+		},
+		"6":
+		{
+			"base_time":20.0,
+			"name":"Krainer Curves",
+			"power":9,
+			"handling":13,
+			"is_lap_end":false
+		},
+		"7":
+		{
+			"base_time":8.0,
+			"name":"Karousel",
+			"power":9,
+			"handling":8,
+			"is_lap_end":false
+		},
+		"8":
+		{
+			"base_time":7.5,
+			"name":"Front Stretch",
+			"power":12,
+			"handling":6,
+			"is_lap_end":false
+		},
+		"9":
+		{
+			"base_time":13.0,
+			"name":"Parabolika",
+			"power":11,
+			"handling":14,
+			"is_lap_end":false
+		},
+		"10":
+		{
+			"base_time":8.5,
+			"name":"1987 Chicane",
+			"power":9,
+			"handling":15,
+			"is_lap_end":false
+		},
+		"11":
+		{
+			"base_time":10.5,
+			"name":"Hotel Trivago",
+			"power":9,
+			"handling":9,
+			"is_lap_end":false
+		},
+		"12":
+		{
+			"base_time":7.5,
+			"name":"Kallifreyan Korner",
+			"power":7,
+			"handling":11,
+			"is_lap_end":true
+		}
+	}
+}
