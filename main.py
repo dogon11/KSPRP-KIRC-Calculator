@@ -11,7 +11,7 @@ from functools import cmp_to_key
 sum_of_differences_weight = 2 # number we divide the sum of differences by to decide how important it is to laptimes.
 corner_randomness_factor = 0.1 # number we can tweak to change how far spread corner times are.
 corner_base_rng_val = 0.6 # Lowest value the corner-time RNG can modify the statistics modifiers by.
-corner_highest_rng_val = 1.4 # Highest value the corner-time RNG can modify the statistics modifiers by.
+corner_highest_rng_val = 1.6 # Highest value the corner-time RNG can modify the statistics modifiers by.
 crash_base_factor = 0.01 # number we can tweak to change how likely a crash is.
 crash_threshold = 0.25 # seconds apart two cars have to be to trigger a crash check.
 pass_threshold = 0.4 # seconds apart two cars have to be to trigger a pass.
@@ -70,9 +70,9 @@ def item_time(track_item, car):
 def crash_check(car_a_time, car_b_time):
     logging.debug("Checking if car A and B have caused a crash.")
     probability = crash_base_factor * (abs(car_a_time - car_b_time) / (-1 * crash_threshold) + 1)
-    #print(f"Crash probability: {str(probability * 100)}") # DEBUG
+    logging.debug(f"Crash probability: {str(probability * 100)}") # DEBUG
     check_num = random.randint(0, 100)
-    #print(f"Check num: {str(check_num)}") # DEBUG
+    logging.debug(f"Check num: {str(check_num)}") # DEBUG
     return True if check_num < (probability * 100) else False
 
 
@@ -161,6 +161,28 @@ def get_position(cars, position):
         return None
 
 
+# Check if any gaps in the field are negative.
+def negative_gap_exists(cars):
+    logging.debug("Checking for negative gap...")
+    field_counter = 1
+    while field_counter < len(cars):
+        ahead_car = field_counter - 1
+        if ahead_car < 1:
+            field_counter += 1
+            continue
+        elif cars[field_counter]['race_time'] is None or cars[ahead_car]['race_time'] is None:
+            return False
+        else:
+            # Check if the car ahead has a negative gap.
+            gap = cars[field_counter]['race_time'] - cars[ahead_car]['race_time']
+            if gap <= 0.0:
+                return True
+        field_counter += 1
+    
+    return False
+
+
+
 # Run a pass check through the field.
 # Separated to keep like code together.
 # Also lets me change how often pass checks are made.
@@ -243,13 +265,6 @@ def run_pass_check(cars):
                 unsuccessful_passes += 1
                 crashes += 1
             else:
-                """
-                print(f"What a clean defense from passing by {car_b['driver_name']}! Absolutely textbook. {car_a['driver_name']} is still right behind, they might mount an attack into the next corner!")
-                car_b["race_time"] = car_b["race_time"] + defender_penalty # Defender penalty.
-                car_a["race_time"] = car_b["race_time"] + attacker_penalty # Attacker penalty.
-                unsuccessful_passes += 1
-                """
-                #"""
                 # Run driver skills against each other if the threshold is close enough, whoever has the higher driver skill wins the pass.
                 if car_a['race_time'] - car_b['race_time'] < skill_threshold and car_a['driver_skill'] > car_b['driver_skill']:
                     # Car A makes the pass on skill.
@@ -258,6 +273,7 @@ def run_pass_check(cars):
                     car_a["position"] = car_b["position"]
                     car_b["position"] = car_a_pos
                     print(f"That's a classic crossover manuever by {car_a['driver_name']} in the {car_a['car_number']}! They've successfully passed {car_b['car_number']} for position {str(car_a_pos - 1)}!")
+                    field = update_positions(field)
                     successful_passes += 1
                     pass_happened = True
                 else:
@@ -266,7 +282,6 @@ def run_pass_check(cars):
                     car_b["race_time"] = car_b["race_time"] + defender_penalty # Defender penalty.
                     car_a["race_time"] = car_b["race_time"] + attacker_penalty # Attacker penalty.
                     unsuccessful_passes += 1
-                #"""
         if pass_happened:
             # Check if we passed the next car ahead by the pass margin. If not, we apply the skill threshold as a penalty.
             # Get the current car and check the gap versus the next car in line.
@@ -357,11 +372,12 @@ def run_race(cars, track, num_laps):
         for track_item in track["items"].keys():
             logging.debug(f"Running track element {str(track_item)}.")
             # Run the track element.
-            # print(f"The field is now going into turn {track_item}!") # TODO Remove.
             field = run_track_item(field, track["items"][track_item], track["reliability_rating"])
         
         # At the end of the lap, run pass checks.
         field = run_pass_check(field)
+        if negative_gap_exists(field):
+            logging.error("Negative gap!")
 
         print(f"At the end of lap {i}, the current standings are:")
         field_counter = 0
@@ -370,6 +386,8 @@ def run_race(cars, track, num_laps):
                 current_car = field[field_counter]
                 print(f"\tCar: {current_car['car_number']}")
                 print(f"\t\tDriver: {current_car['driver_name']}")
+                print(f"\t\tPosition: {current_car['position']}")
+                print(f"\t\tRace time: {str(current_car['race_time'])}")
                 print(f"\t\tGap: {'0.0' if current_car['race_time'] is None or field_counter == 0 else str(round(current_car['race_time'] - field[field_counter - 1]['race_time'], 2))}")
                 field_counter += 1
 
@@ -456,6 +474,19 @@ def run_race_weekend(cars, track, num_laps):
 # calls run_race_weekend.
 def main():
     print("Welcome to the IKMO race weekend calculator!")
+
+    global lead_changes
+    global retirements
+    global successful_passes
+    global unsuccessful_passes
+    global crashes
+
+
+    successful_passes = 0
+    unsuccessful_passes = 0
+    lead_changes = 0
+    crashes = 0
+    retirements = 0
 
     logging.basicConfig(filename='log.txt', filemode='w', format='%(levelname)s: %(message)s')
 
