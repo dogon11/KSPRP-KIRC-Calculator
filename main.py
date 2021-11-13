@@ -3,13 +3,14 @@ import random
 import logging
 import sys
 from functools import cmp_to_key
+import numpy as np
 
 
 # Constants for easy modification
 # TODO: consider making this a config file.
 
 sum_of_differences_weight = 2 # number we divide the sum of differences by to decide how important it is to laptimes.
-corner_randomness_factor = 0.1 # number we can tweak to change how far spread corner times are.
+corner_randomness_factor = 0.15 # number we can tweak to change how far spread corner times are.
 corner_base_rng_val = 0.6 # Lowest value the corner-time RNG can modify the statistics modifiers by.
 corner_highest_rng_val = 1.6 # Highest value the corner-time RNG can modify the statistics modifiers by.
 crash_base_factor = 0.01 # number we can tweak to change how likely a crash is.
@@ -22,6 +23,10 @@ start_penalty = 0.2 # seconds between cars at the start of the race.
 starting_health = 3 # number of mechanical failures that can occur during the race before a car must retire.
 failure_factor = 1.10 # modifier to odds of mechanical failures, adjustable to increase/reduce retirement rates. Higher means less, lower means more.
 max_breakdown_resistance = 0.9 # Maximum probability of dodging a mechanical breakdown
+avg_pitstop_time = 45.0 # Average pitstop time in the league right now.
+std_dev_pitstop_time = 5.0 # Size of standard deviation for pitstop times.
+min_pitstop_time = 30.0 # Minimum pitstop time. Don't want to have anomalously low pitstop times.
+max_pitstop_time = 75.0 # Max pitstip time. Don't want to have anomalously high pitstop times.
 
 
 # Global variables for tracking statistics.
@@ -359,10 +364,35 @@ def run_track_item(cars, track_item, track_rating):
     # Step 4: Return the modified field.
     return cars
 
+
+# Run pit stops for the whole field.
+def run_pit_stops(cars):
+    for car in cars:
+        if car['race_time'] is None:
+            continue
+
+        print(f"Now {car['driver_name']} is coming down the pit lane to his team! The number {car['car_number']} is coming for their pitstop!")
+        # Take a single sample from a normal distribution of pit stop times.
+        pit_stop_time = np.random.normal(avg_pitstop_time, std_dev_pitstop_time, 1)[0]
+        # Apply max and mins to it.
+        if pit_stop_time <= min_pitstop_time:
+            print("Wow! The team has set an incredible pace in their garage, they're getting out early!")
+            pit_stop_time = min_pitstop_time
+        elif pit_stop_time >= max_pitstop_time:
+            print("Oh no! They've had an issue with a stuck center lock nut! This is going to be an incredibly long pitstop, they're going to lose so many positions for this!")
+            pit_stop_time = max_pitstop_time
+        # Now apply to the car's race time.
+        print(f"And now the {car['car_number']} team is sending their car out, with a pit stop time of {pit_stop_time} seconds!")
+        car['race_time'] = car['race_time'] + pit_stop_time
+    
+    return cars
+
+
 # Given a field of entrants, populated,
 # and the track, run a race with the given
 # number of laps. 
 def run_race(cars, track, num_laps):
+    has_pitstop_occurred = False
     field = cars
     # For each lap...
     for i in range(1, num_laps + 1):
@@ -374,6 +404,11 @@ def run_race(cars, track, num_laps):
             # Run the track element.
             field = run_track_item(field, track["items"][track_item], track["reliability_rating"])
         
+        # Check if we're at the halfway point, and if so, run the pitstop.
+        if i > num_laps / 2 and not has_pitstop_occurred:
+            field = run_pit_stops(field)
+            has_pitstop_occurred = True
+
         # At the end of the lap, run pass checks.
         field = run_pass_check(field)
         if negative_gap_exists(field):
